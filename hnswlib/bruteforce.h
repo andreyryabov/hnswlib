@@ -129,8 +129,7 @@ namespace hnswlib {
             return result;
         }
 
-        void saveIndex(const std::string &location) {
-            std::ofstream output(location, std::ios::binary);
+        void saveIndex(const std::stringstream & output) {
             std::streampos position;
 
             writeBinaryPOD(output, maxelements_);
@@ -138,8 +137,6 @@ namespace hnswlib {
             writeBinaryPOD(output, cur_element_count);
 
             output.write(data_, maxelements_ * size_per_element_);
-
-            output.close();
         }
 
         void loadIndex(const std::string &location, SpaceInterface<dist_t> *s) {

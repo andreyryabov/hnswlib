@@ -4,6 +4,7 @@
 #include "hnswlib.h"
 #include <random>
 #include <stdlib.h>
+#include <sstream>
 #include <unordered_set>
 #include <list>
 
@@ -20,8 +21,8 @@ namespace hnswlib {
 
         }
 
-        HierarchicalNSW(SpaceInterface<dist_t> *s, const std::string &location, bool nmslib = false, size_t max_elements=0) {
-            loadIndex(location, s, max_elements);
+        HierarchicalNSW(SpaceInterface<dist_t> *s, std::stringstream &input, size_t max_elements=0) {
+            loadIndex(input, s, max_elements);
         }
 
         HierarchicalNSW(SpaceInterface<dist_t> *s, size_t max_elements, size_t M = 16, size_t ef_construction = 200, size_t random_seed = 100) :
@@ -566,8 +567,7 @@ namespace hnswlib {
 
         }
 
-        void saveIndex(const std::string &location) {
-            std::ofstream output(location, std::ios::binary);
+        void saveIndex(std::stringstream & output) {
             std::streampos position;
 
             writeBinaryPOD(output, offsetLevel0_);
@@ -593,17 +593,9 @@ namespace hnswlib {
                 if (linkListSize)
                     output.write(linkLists_[i], linkListSize);
             }
-            output.close();
         }
 
-        void loadIndex(const std::string &location, SpaceInterface<dist_t> *s, size_t max_elements_i=0) {
-
-
-            std::ifstream input(location, std::ios::binary);
-
-            if (!input.is_open())
-                throw std::runtime_error("Cannot open file");
-
+        void loadIndex(std::stringstream & input, SpaceInterface<dist_t> *s, size_t max_elements_i=0) {
 
             // get file size:
             input.seekg(0,input.end);
@@ -711,9 +703,6 @@ namespace hnswlib {
                 if(isMarkedDeleted(i))
                     has_deletions_=true;
             }
-            
-            input.close();
-
             return;
         }
 

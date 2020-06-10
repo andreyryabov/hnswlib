@@ -25,7 +25,7 @@
 
 #include <queue>
 #include <vector>
-
+#include <sstream>
 #include <string.h>
 
 namespace hnswlib {
@@ -40,7 +40,7 @@ namespace hnswlib {
     };
 
     template<typename T>
-    static void writeBinaryPOD(std::ostream &out, const T &podRef) {
+    static void writeBinaryPOD(std::stringstream &out, const T &podRef) {
         out.write((char *) &podRef, sizeof(T));
     }
 
@@ -74,7 +74,7 @@ namespace hnswlib {
         template <typename Comp>
         std::vector<std::pair<dist_t, labeltype>> searchKnn(const void*, size_t, Comp) {
         }
-        virtual void saveIndex(const std::string &location)=0;
+        virtual void saveIndex(std::stringstream &)=0;
         virtual ~AlgorithmInterface(){
         }
     };
