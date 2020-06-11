@@ -129,7 +129,7 @@ namespace hnswlib {
             return result;
         }
 
-        void saveIndex(const std::stringstream & output) {
+        void saveIndex(std::stringstream & output) {
             std::streampos position;
 
             writeBinaryPOD(output, maxelements_);
@@ -139,10 +139,7 @@ namespace hnswlib {
             output.write(data_, maxelements_ * size_per_element_);
         }
 
-        void loadIndex(const std::string &location, SpaceInterface<dist_t> *s) {
-
-
-            std::ifstream input(location, std::ios::binary);
+        void loadIndex(std::stringstream &input, SpaceInterface<dist_t> *s) {
             std::streampos position;
 
             readBinaryPOD(input, maxelements_);
@@ -158,9 +155,6 @@ namespace hnswlib {
                 std::runtime_error("Not enough memory: loadIndex failed to allocate data");
 
             input.read(data_, maxelements_ * size_per_element_);
-
-            input.close();
-
         }
 
     };
