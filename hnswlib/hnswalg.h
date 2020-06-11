@@ -707,7 +707,7 @@ namespace hnswlib {
         }
 
         template<typename data_t>
-        std::vector<data_t> getDataByLabel(labeltype label)
+        const data_t * getDataByLabel(labeltype label)
         {
             tableint label_c;
             auto search = label_lookup_.find(label);
@@ -715,16 +715,7 @@ namespace hnswlib {
                 throw std::runtime_error("Label not found");
             }
             label_c = search->second;
-
-            char* data_ptrv = getDataByInternalId(label_c);
-            size_t dim = *((size_t *) dist_func_param_);
-            std::vector<data_t> data;
-            data_t* data_ptr = (data_t*) data_ptrv;
-            for (int i = 0; i < dim; i++) {
-                data.push_back(*data_ptr);
-                data_ptr += 1;
-            }
-            return data;
+            return (const data_t*)getDataByInternalId(label_c);
         }
 
         static const unsigned char DELETE_MARK = 0x01;
